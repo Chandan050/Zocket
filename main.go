@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"zocket/distributed-kv-store/hashing"
+	"zocket/distributed-kv-store/service"
 	"zocket/distributed-kv-store/store"
 )
 
@@ -36,6 +37,11 @@ func main() {
 	http.HandleFunc("/set", setHandler)
 	http.HandleFunc("/get", getHandler)
 	fmt.Printf("Server running on port 8080 as %s...\n", currentNode)
+	go service.CheckHealth()
+	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("OK"))
+	})
 	if err := http.ListenAndServe(fmt.Sprintf(":"+port), nil); err != nil {
 		fmt.Println("Error starting server:", err)
 	}
@@ -92,6 +98,7 @@ func getHandler(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(body))
 		return
 	}
+	fmt.Printf("Fetching key=%s from node %s\n", key, node)
 
 	value, exists := kvStore.Get(key)
 	if exists {

@@ -5,9 +5,10 @@
 
 ## | Client    +------->+ HashRing      +------->+ Node Responsible|
 
-## | PUT/GET   |  -      | hashKey(key)  |        | for that hash   |          | Store/Retrieve KV|
+## | PUT/GET   |      | hashKey(key)  |        | for that hash   |          | Store/Retrieve KV|
 
-</br>                                  
+</br>  
+                             
 
 # Description:
 ### 1. The client issues a PUT or GET request with a key.

@@ -22,9 +22,8 @@ func NewStore() *Store {
 	}
 }
 
-var Nodes = []string{"localhost:8081", "localhost:8082", "localhost:8083"}
-
-
+var Nodes = []string{"http://localhost:8081", "http://localhost:8082",
+	"http://localhost:8083"}
 
 // replicate sends the key-value pair to other nodes and waits for quorum acknowledgments
 func replicate(key, value string) error {
@@ -72,12 +71,17 @@ func (s *Store) Post(key, value string) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.data[key] = value
-	err := replicate(key, value)
-	if err != nil {
-		// rollback or handle failure accordingly
-		delete(s.data, key)
-		return err
-	}
+	// Replicate to other nodes
+	go func() {
+		err := replicate(key, value)
+		if err != nil {
+			// rollback or handle failure accordingly
+			delete(s.data, key)
+
+		}
+	}()
+
+	fmt.Printf("Stored key: %s, value: %s\n", key, value)
 	return nil
 }
 
