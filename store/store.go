@@ -22,7 +22,9 @@ func NewStore() *Store {
 	}
 }
 
-var Nodes = []string{}
+var Nodes = []string{"localhost:8081", "localhost:8082", "localhost:8083"}
+
+
 
 // replicate sends the key-value pair to other nodes and waits for quorum acknowledgments
 func replicate(key, value string) error {

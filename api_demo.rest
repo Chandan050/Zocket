@@ -1,0 +1,9 @@
+# API Demo for Distributed Key-Value Store
+
+### Set a key-value pair
+GET http://localhost:8080/set?key=mykey&value=myvalue
+Accept: application/json
+
+### Get the value for a key
+GET http://localhost:8080/get?key=key01
+Accept: application/json
